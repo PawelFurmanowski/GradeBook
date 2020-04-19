@@ -3,30 +3,28 @@ using System.Collections.Generic;
 
 namespace GradeBook
 {
+
+    
     class Program
     {
         static void Main(string[] args)
         {
-            var numbers = new double[] {12.7, 10.3, 6.11,4.1};
-            var grades =new List<double>() {12.7, 10.3, 6.11,4.1};
-            grades.Add(56.1);
+            Book book = new Book("Książka Pawła");
+            book.AddGrade(89.1);
+            book.AddGrade(90.5);
+            book.AddGrade(77.3);
+            book.AddGrade(90.4);
             
-
-             var result = 0.0;
-
-            foreach (var number in grades)
-            {
-                result += number;
-
-            }
-
             
-            Console.WriteLine("Result in " + result);
-
-            if(args.Length > 0)
-            Console.WriteLine($"Hello, {args[0]}!");
-            else
-            Console.WriteLine("Hello World!");
+            
+            
+            
+            
+           book.ShowStatistics();
         }
+
+             
+
+            
     }
 }
