@@ -15,12 +15,50 @@ namespace GradeBook
             grades = new List<double>();
 
         }
+
+        public void AddLetterGrade(char letter)
+        {
+            if(!char.IsUpper(letter))
+            {
+                letter = char.ToUpper(letter);
+            }
+
+            switch(letter)
+            {
+                case 'A':
+                    AddGrade(90);
+                    break;
+                case 'B':
+                    AddGrade(80);
+                    break;
+                case 'C':
+                    AddGrade(70);
+                    break;
+                case 'D':
+                    AddGrade(60);
+                    break;
+                
+                default:
+                    AddGrade(0);
+                    break;
+
+
+            }
+            
+
+        }
         
 
         public void AddGrade(double grade)
         {
-            
-          grades.Add(grade);
+            if(grade <= 100 && grade >= 0)
+            {
+                grades.Add(grade);
+            }
+            else
+            {
+                throw new ArgumentException($"Podano nieprawidłową wartość {nameof(grade)}");
+            }
         }
 
         public Statistics GetStatistics()
@@ -30,16 +68,47 @@ namespace GradeBook
             result.High = double.MinValue;
             result.Low = double.MaxValue;
 
-
-            foreach( double grade in grades)
+            
+            //foreach( double grade in grades)
+            for(int i = 0; i < grades.Count; i++)
             {
-                result.High = Math.Max(grade, result.High); //szukanie największej oceny
-                result.Low = Math.Min(grade, result.Low); //szukanie najmniejszej oceny
+                if(grades[i] == 42.1)
+                {
+                    break;
+                    
+                }
 
-                result.Average += grade;
+                result.High = Math.Max(grades[i], result.High); //szukanie największej oceny
+                result.Low = Math.Min(grades[i], result.Low); //szukanie najmniejszej oceny
 
+                result.Average += grades[i];
+                
             }
+
             result.Average = result.Average/grades.Count; //średnia ocen
+
+            switch(result.Average)
+            {
+                case var d when d >= 90.0:
+                    result.letter = 'A';
+                    break;
+
+                case var d when d >= 80.0:
+                    result.letter = 'B';
+                    break;
+
+                case var d when d >= 70.0:
+                    result.letter = 'C';
+                    break;
+
+                case var d when d >= 60:
+                    result.letter = 'D';
+                    break;
+                
+                default:
+                    result.letter = 'F';
+                    break;
+            }
 
             return result;
         }
