@@ -10,13 +10,12 @@ namespace GradeBook
         static void Main(string[] args)
         {
             Book book = new Book("Książka Pawła");
-            
-            
-           
-            bool done = false;
-            
-            
-            
+            book.GradeAdded += OnGradeAdded;
+             book.GradeAdded += OnGradeAdded;
+              book.GradeAdded -= OnGradeAdded;
+               book.GradeAdded += OnGradeAdded;
+                
+        
             while(true)
             {
             Console.WriteLine("Podaj ocenę lub podaj 'q' aby wyjść: ");
@@ -33,6 +32,7 @@ namespace GradeBook
             
             var grade = double.Parse(userInput);
             book.AddGrade(grade);
+            
             }
             catch(ArgumentException ex )
             {
@@ -51,7 +51,9 @@ namespace GradeBook
             
             var stats = book.GetStatistics();
             
-           
+            
+            Console.WriteLine(Book.CATEGORY);
+            Console.WriteLine($"For the book named {book.Name}");
             Console.WriteLine($"Największa wartość to: {stats.High}");
             Console.WriteLine($"Najmniejsza wartość to: {stats.Low}");
             Console.WriteLine($"Średnia wartość to: {stats.Average:N1}");
@@ -59,10 +61,11 @@ namespace GradeBook
             
             
            
+        }      
+
+        static void OnGradeAdded(object sender, EventArgs e)
+        {
+            Console.WriteLine("Dodano ocenę!");
         }
-
-             
-
-            
     }
 }

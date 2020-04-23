@@ -3,20 +3,19 @@ using System;
 
 namespace GradeBook
 {
+    public delegate void GradeAddedDelegate(object sender, EventArgs args);
+
     public class Book
-    {
-         
-        public string Name;
-         private List<double> grades;
-         
+    {                
         public Book(string name)
         {
+            
             this.Name = name; 
             grades = new List<double>();
 
         }
 
-        public void AddLetterGrade(char letter)
+        public void AddGrade(char letter)
         {
             if(!char.IsUpper(letter))
             {
@@ -44,8 +43,6 @@ namespace GradeBook
 
 
             }
-            
-
         }
         
 
@@ -54,12 +51,18 @@ namespace GradeBook
             if(grade <= 100 && grade >= 0)
             {
                 grades.Add(grade);
+                if(GradeAdded != null)
+                {
+                    GradeAdded(this, new EventArgs());
+                }
             }
             else
             {
                 throw new ArgumentException($"Podano nieprawidłową wartość {nameof(grade)}");
             }
         }
+
+        public event GradeAddedDelegate GradeAdded;
 
         public Statistics GetStatistics()
         {
@@ -113,6 +116,24 @@ namespace GradeBook
             return result;
         }
         
+             private List<double> grades;
+            private string name; //pole
+            public string Name //właściwość 
+            {
+                 get
+                    {
+                      return name;
+                    }
+                  set
+                    {
+                        if(!string.IsNullOrEmpty(value))
+                        {
+                         name = value;
+                        }
+                    }
+            }
+
+            public const string CATEGORY = "Science"; 
         
         
     }
