@@ -1,140 +1,15 @@
-using System.Collections.Generic;
-using System;
-
 namespace GradeBook
 {
-    public delegate void GradeAddedDelegate(object sender, EventArgs args);
-
-    public class Book
-    {                
-        public Book(string name)
+   public abstract class Book : NamedObject, IBook
+    {
+        public Book(string name) : base(name)
         {
-            
-            this.Name = name; 
-            grades = new List<double>();
-
         }
 
-        public void AddGrade(char letter)
-        {
-            if(!char.IsUpper(letter))
-            {
-                letter = char.ToUpper(letter);
-            }
+        public abstract event GradeAddedDelegate GradeAdded;
 
-            switch(letter)
-            {
-                case 'A':
-                    AddGrade(90);
-                    break;
-                case 'B':
-                    AddGrade(80);
-                    break;
-                case 'C':
-                    AddGrade(70);
-                    break;
-                case 'D':
-                    AddGrade(60);
-                    break;
-                
-                default:
-                    AddGrade(0);
-                    break;
+        public abstract void AddGrade(double grade);
 
-
-            }
-        }
-        
-
-        public void AddGrade(double grade)
-        {
-            if(grade <= 100 && grade >= 0)
-            {
-                grades.Add(grade);
-                if(GradeAdded != null)
-                {
-                    GradeAdded(this, new EventArgs());
-                }
-            }
-            else
-            {
-                throw new ArgumentException($"Podano nieprawidłową wartość {nameof(grade)}");
-            }
-        }
-
-        public event GradeAddedDelegate GradeAdded;
-
-        public Statistics GetStatistics()
-        {
-            Statistics result = new Statistics();
-            result.Average = 0.0;
-            result.High = double.MinValue;
-            result.Low = double.MaxValue;
-
-            
-            //foreach( double grade in grades)
-            for(int i = 0; i < grades.Count; i++)
-            {
-                if(grades[i] == 42.1)
-                {
-                    break;
-                    
-                }
-
-                result.High = Math.Max(grades[i], result.High); //szukanie największej oceny
-                result.Low = Math.Min(grades[i], result.Low); //szukanie najmniejszej oceny
-
-                result.Average += grades[i];
-                
-            }
-
-            result.Average = result.Average/grades.Count; //średnia ocen
-
-            switch(result.Average)
-            {
-                case var d when d >= 90.0:
-                    result.letter = 'A';
-                    break;
-
-                case var d when d >= 80.0:
-                    result.letter = 'B';
-                    break;
-
-                case var d when d >= 70.0:
-                    result.letter = 'C';
-                    break;
-
-                case var d when d >= 60:
-                    result.letter = 'D';
-                    break;
-                
-                default:
-                    result.letter = 'F';
-                    break;
-            }
-
-            return result;
-        }
-        
-             private List<double> grades;
-            private string name; //pole
-            public string Name //właściwość 
-            {
-                 get
-                    {
-                      return name;
-                    }
-                  set
-                    {
-                        if(!string.IsNullOrEmpty(value))
-                        {
-                         name = value;
-                        }
-                    }
-            }
-
-            public const string CATEGORY = "Science"; 
-        
-        
+        public abstract Statistics GetStatistics();
     }
 }
